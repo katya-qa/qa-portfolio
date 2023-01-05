@@ -1,0 +1,40 @@
+var responseInJson = pm.response.json();
+
+var projectName = responseInJson.name;
+var projectAnnouncement = responseInJson.announcement;
+
+console.log("projectName: " + projectName);
+console.log("projectAnnouncement: " + projectAnnouncement);
+
+pm.collectionVariables.set("projectID", responseInJson.id);
+
+console.log("projectID:" + pm.collectionVariables.get("projectID"));
+
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+pm.test("Response time is less than 1100ms", function () {
+    pm.expect(pm.response.responseTime).to.be.below(1100);
+});
+
+pm.test("Verify name  and announcement of the project", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.name).to.eql(pm.iterationData.get("name"));
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.announcement).to.eql(pm.iterationData.get("announcement"));
+});
+
+
+pm.test("Status code is 200", function () {
+    pm.response.to.have.status(200);
+});
+pm.test("Response time is less than 400ms", function () {
+    pm.expect(pm.response.responseTime).to.be.below(400);
+});
+pm.test("Verify updated project info", function () {
+    var jsonData = pm.response.json();
+    pm.expect(jsonData.name).to.eql(pm.iterationData.get("updated_name"));
+     pm.expect(jsonData.announcement).to.eql(pm.iterationData.get("updated_announcement"));
+});
+
+
